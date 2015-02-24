@@ -1,12 +1,12 @@
-function model = dynamicLPBoostUnnorm(K,Y,D,l,iter)
+function model = dynamicLPBoostVary(K,Y,D,l,iter)
 % Extend 3 spectrum kernel of length 3 to longer length
-% Dynamic programming LPBoost
+% Selects varying-length substrings
 
-% Input:
+% Dynamic programming in LPBoost
 % K: m*8000 3-spectrum kernel matrix
 % Y: desired labels
-% D: regularisation parameter
-% l: target length
+% D: regularisation parameters
+% l: maximum length
 % iter: max iterations
 
 % Output:
@@ -14,13 +14,14 @@ function model = dynamicLPBoostUnnorm(K,Y,D,l,iter)
 
 % Yuxin Sun: yuxin.sun [at] ucl [dot] ac [dot] uk
 
+
 [m, ~]=size(K);
 u=ones(m,1)/m;
 beta=0;
 F=[];
 opt = [];
 
-hypo = dynamicPosNegUnnorm(K, u, Y, m, l);
+hypo = dynamicPosNegVary(K, u, Y, m, l);
 
 F = [F, hypo.kern];
 crit = hypo.val;
@@ -33,16 +34,16 @@ while( (counter<=iter)&& (crit>= (beta+eps) ) )
     model.idx(counter)=hypo.idx;
     model.atr{counter} = hypo.atr;
     model.kern(:, counter) = hypo.kern;
-    model.sub(:, counter) = hypo.sub';
-    model.subrvs(:, counter) = hypo.subrvs';
-          
-    [u, a,beta]=LPcvx(opt,Y,D);
+    model.sub{counter} = hypo.sub';
+    model.subrvs{counter} = hypo.subrvs';
+        
+    [u,a,beta]=LPcvx(opt, Y, D);
     model.beta(counter)=beta;
 
     fprintf('ITERATION: %d CRITERION: %d, BETA: %d \n',counter,crit,beta);
     counter = counter+1;
-
-    hypo = dynamicPosNegUnnorm(K, u, Y, m, l);
+    
+    hypo = dynamicPosNegVary(K, u, Y, m, l);
     crit = hypo.val;
     F = [F, hypo.kern];
 
