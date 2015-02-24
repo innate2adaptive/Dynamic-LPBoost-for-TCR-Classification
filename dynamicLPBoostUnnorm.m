@@ -1,5 +1,6 @@
 function model = dynamicLPBoostUnnorm(K,Y,D,l,iter)
 % Extend 3 spectrum kernel of length 3 to longer length
+% Selects fixed-length substrings with uniform transition probabilities
 % Dynamic programming LPBoost
 
 % Input:
