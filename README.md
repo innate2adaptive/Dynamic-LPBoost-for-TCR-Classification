@@ -5,7 +5,7 @@ To run the code you will need to install Matlab toolbox CVX. Download and docume
 
 Description of functions:
 
-1. Data Processing
+--- Data Processing
 
 (1) DataProcessing.py
 
@@ -18,7 +18,7 @@ data_norm = bsxfun(@ridivide, data, sqrt(sum(data.^2, 2)))
 where data_norm is normalised data matrix.
 
 
-2. LPBoost
+--- LPBoost
 
 This folder contains functions of LPBoost with explicit feature space.
 
@@ -31,7 +31,7 @@ A Matlab funtion to perform LPBoost. Please note that since the data matrix cont
 A Matlab function to perform convex optimisation during LPBoost iterations.
 
 
-3. Dynamic Programming LPBoost
+--- Dynamic Programming LPBoost
 
 This folder contains functions of LPBoost, where the features are selected by an efficient dynamic programming procedure.
 
@@ -52,12 +52,12 @@ A Matlab function that performs dynamic programming given data_norm.
 A Matlab function that returns the kernels of selected substrings.
 
 
-4. SampleCode.m
+--- SampleCode.m
 
 A Matlab script that shows the steps of both LPBoost and dynamic LPBoost. Please note this script does NOT contain code for LPBoost in conjunction with SVM. A better performance can be achieved by using the features selected by LPBoost in SVM.
 
 
-5. Varying Transition Probabilities (not used anymore)
+--- Varying Transition Probabilities (not used anymore)
 
 This folder contains function of dynamic programming LPBoost over Fisher kernels. Functions inside this folder is not used anymore and will be replaced by dynamic programming over the DAG in the future.
 
