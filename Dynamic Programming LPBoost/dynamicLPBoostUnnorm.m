@@ -37,7 +37,7 @@ while( (counter<=iter)&& (crit>= (beta+eps) ) )
     model.sub(:, counter) = hypo.sub';
     model.subrvs(:, counter) = hypo.subrvs';
           
-    [u, a,beta]=LPcvx(opt,Y,D);
+    [u, a, beta]=LPcvx(opt,Y,D);
     model.beta(counter)=beta;
 
     fprintf('ITERATION: %d CRITERION: %d, BETA: %d \n',counter,crit,beta);
