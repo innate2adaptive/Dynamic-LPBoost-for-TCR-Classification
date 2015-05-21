@@ -1,11 +1,15 @@
 #function model for LP Boost in R
-## Original code  by: Dimitrios Athanasakis (dathanasakis [at] gotbim [dot] com)
+## Original code by: Dimitrios Athanasakis (dathanasakis [at] gotbim [dot] com)
 # and Yuxin Sun: yuxin.sun [at] ucl [dot] ac [dot] uk; using cvx package in Matlab
-#X is a matrix of weak learners; each row is a weak learner; each column is a sample. 
-#Y is a classification vector; this must correspond to the order of columns in X, and must be {1,-1}.
-#D is a weight for teh penalty ;it should be set at 1/mv where m is teh number of samples and v [0,1]  
+
+#X is a matrix of weak learners; each columns is a weak learner; each row  is a sample. 
+#NOTE X is normally normalised for number of features per sample : either 1norm (divide by sum of features) or two norm (divide by sqrt(sum(features^2))).
+#NOTE X MUST be centred : combine X with -X, so you end up with twice the number of nominal features but doubled. 
+
+#Y is a classification vector; this must correspond to the order of rows in X, and must be {1,-1}.
+#D is a weight for the penalty ;it should be set at 1/mv where m is the number of samples and v [0,1]  
 #iter is the number of iterations before stopping 
-#OUTPUT of function is the primal and dual variables 
+#OUTPUT of function is a list containing the primal (sample weights) and dual (feature weights) variables. 
 LPBoostYS <-function (X, Y, D, iter){
 #requires package lpSolve
 library (lpSolve)
@@ -96,9 +100,9 @@ LP<-lp("min",f.obj,f.con,f.dir,f.rhs,compute.sens=TRUE)
 #LP<-lp("min",f.obj,f.con,f.dir,f.rhs)
 beta<-LP$objval
 u<-LP$solution[1:M]
-#duals coefficients are before  dual constraints
+#duals coefficients are before  dual constraints ?
 end <-dim(f.con)[1]+1
-
+a<-LP$duals
 list(u,beta,LP$duals)
         }
 #a(a<=eps)=0;
