@@ -9,7 +9,11 @@
 #Y is a classification vector; this must correspond to the order of rows in X, and must be {1,-1}.
 #D is a weight for the penalty ;it should be set at 1/mv where m is the number of samples and v [0,1]  
 #iter is the number of iterations before stopping 
-#OUTPUT of function is a list containing the primal (sample weights) and dual (feature weights) variables. 
+#OUTPUT of function is a list of three elements containing 
+#[[1]] the primal (sample weights);
+#[[2]][1:L] the dual (feature) weights where L is the lenght of 
+#[[3]] The list of features selected
+
 LPBoostYS <-function (X, Y, D, iter){
 #requires package lpSolve
 library (lpSolve)
@@ -80,8 +84,7 @@ LPcvx <-function(X1,Y,D){
 M<-dim(X1)[1]
 N<-dim(X1)[2]
 Z <- apply (X1, 2 , function(x){x*Y})
-#these are teh constrains that sum less than beta
-
+#these are the constraints that sum less than beta
 beta.con<-cbind(t(Z),rep(-1,N))
 #constraint that sum u =1
 sumu.con<-c(rep(1,M),0)
