@@ -35,36 +35,34 @@ beta <- 0;
 u = rep(1,M)/M
 eps<-1e-6
 #calculate which triplet gives best discrimination by maximising uY*X
-uY<-u*Y
-weak_L<-uY %*% X
-val=max(weak_L)
-ind<-which.max(weak_L)
-index<-ind
-hypo<-as.matrix(X[,ind])
+index<-c()
+hypo<-c()
+val<-1
 #rm(u,beta)
-while (counter <= iter & val >= beta+eps)   {     
-  if (counter >1) {
-    hypo = cbind(hypo,X[, ind])
-  }
-  model<-LPcvx(hypo, Y, D)
-  
-  #model.beta(counter) = beta;
-  #model.idx(counter) = ind;
-  cat("\nITERATION ",counter,"\t beta",  beta, "\t Val", val)
-  counter <- counter + 1
-  u<-model[[1]]
-  beta<-model[[2]]
-  #Z <- apply (hypo, 2 , function(x){x*Y})
+while (counter <= iter & val > beta+eps)   { 
   #recalculate which triplet gives best discrimination by maximising uY*X
   uY<-u*Y
   weak_L<-uY %*% X
   val=max(weak_L)
   ind<-which.max(weak_L)
   index<-c(index,ind)
+#  if (counter >1) 
+  hypo = cbind(hypo,X[, ind])
+
+  model<-LPcvx(hypo, Y, D)
+
+#print iterations  
+  cat("\nITERATION ",counter,"\t beta",  beta, "\t Val", val)
+  counter <- counter + 1
+  u<-model[[1]]
+  beta<-model[[2]]
+  #Z <- apply (hypo, 2 , function(x){x*Y})
+  
 }
 cat ("\n user system elapsed \n",proc.time()[1]-start_time[1],"  ",proc.time()[2:3]-start_time[2:3],"\n")
 #outputs both primal ("a") and dual "u" variables
-list(model[[1]],model[[3]],index)
+l<-length(index)-1
+list(model[[1]],model[[3]][1:l],index[1:l])
 }
 
 #######################################################################################################################
